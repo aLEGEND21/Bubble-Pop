@@ -140,6 +140,7 @@ class BalloonPop:
         self.running = False
         if self.win_type == 0:
             self.multiplier = 0.0
+            self.payout = 0.0
         await self.update_message(interaction)
         
         
