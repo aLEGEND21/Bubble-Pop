@@ -33,6 +33,7 @@ class BalloonPop:
         self.multiplier: float = 0.0
         self.payout: float = 0.0
         self.running: bool = True
+        self.win_type: int = None
     
     async def start_game(self):
         """Starts the game and sends the first message.
@@ -92,6 +93,7 @@ class BalloonPop:
         
         if interaction.custom_id == "stop":
             #await interaction.response.send_message(":x: You stopped the game", ephemeral=True)
+            self.win_type = 1
             await self.game_over(interaction)
         
         elif interaction.custom_id == "red":
@@ -102,6 +104,7 @@ class BalloonPop:
                 await self.update_message(interaction)
             else:
                 #await interaction.response.send_message(f":x: You popped the {RED_BALLOON_EMOJI} red balloon and lost", ephemeral=True)
+                self.win_type = 0
                 await self.game_over(interaction)
         
         elif interaction.custom_id == "blue":
@@ -112,6 +115,7 @@ class BalloonPop:
                 await self.update_message(interaction)
             else:
                 #await interaction.response.send_message(f":x: You popped the {BLUE_BALLOON_EMOJI} blue balloon and lost", ephemeral=True)
+                self.win_type = 0
                 await self.game_over(interaction)
         
         elif interaction.custom_id == "green":
@@ -122,6 +126,7 @@ class BalloonPop:
                 await self.update_message(interaction)
             else:
                 #await interaction.response.send_message(f":x: You popped the {GREEN_BALLOON_EMOJI} green balloon and lost", ephemeral=True)
+                self.win_type = 0
                 await self.game_over(interaction)
     
     async def on_timeout(self):
@@ -133,6 +138,8 @@ class BalloonPop:
         """Is called when the game is over. It stops the game and updates the message. Any cleanup should be done here.
         """
         self.running = False
+        if self.win_type == 0:
+            self.multiplier = 0.0
         await self.update_message(interaction)
         
         
